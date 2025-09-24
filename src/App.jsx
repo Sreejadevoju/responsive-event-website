@@ -1,10 +1,21 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Signup from "./pages/Signup";
+import React, { useState } from "react";
 import Login from "./pages/Login";
 import Events from "./pages/Events";
 
 function App() {
-  const isAuthenticated = localStorage.getItem("auth") === "true";
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("auth") === "true"
+  );
+
+  React.useEffect(() => {
+    const handleStorageChange = () => {
+      setIsAuthenticated(localStorage.getItem("auth") === "true");
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <Router>
@@ -20,5 +31,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
